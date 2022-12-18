@@ -74,9 +74,9 @@
                 <td class="small text-muted">출시일: </td>
                 <td class="small">{{post.created_at | date:"Y-m-d"}}</td>
               </tr>
-            </table><hr>
+            </table>
             {% if post.hook_text %}
-              <small class="">{{post.hook_text}}</small>
+              <hr><small class="">{{post.hook_text}}</small>
             {% endif %}
           </div>
         </div>

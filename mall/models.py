@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 # 제조사
@@ -26,6 +27,9 @@ class Category(models.Model):
 
   def __str__(self):
     return self.name
+
+  def get_absolute_url(self):
+    return f'/mall/category/{self.slug}/'
 
   class Meta:
     verbose_name_plural = 'Categories'

@@ -4,10 +4,10 @@
   <div class="card-body">
     <div class="row">
       <ul class="list-unstyled mb-0">
-        <!-- for c in categories -->
-          <li><a class="text-dark" href="#"></a></li>
-        <!-- endfor -->
-        <li><a class="text-dark" href="#">미분류</a></li>
+        {% for c in categories %}
+          <li><a class="text-dark" href="{{c.get_absolute_url}}">{{c}} ({{c.post_set.count}})</a></li>
+        {% endfor %}
+        <li><a class="text-dark" href="/mall/category/no_category/">미분류 ({{no_category_post_count}})</a></li>
       </ul>
     </div>
   </div>

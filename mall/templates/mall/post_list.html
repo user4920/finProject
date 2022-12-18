@@ -9,7 +9,11 @@
     <!-- Post 리스트 -->
     <div class="col-md-8 col-lg-9">
       <!-- header -->
-      <h1>Store</h1>
+      <h1>Store
+        {% if category %}
+          - <span class="badge badge-secondary">{{category}}</span>
+        {% endif %}
+      </h1>
 
       <!-- search Box -->
       <div class="input-group ml-auto mr-2" style="width:230px">
@@ -47,10 +51,10 @@
                   {% endif %}
                   <span>
                     {% if p.category %}
-                      <a href="#"
+                      <a href="{{p.category.get_absolute_url}}"
                          class="badge badge-pill badge-secondary">{{p.category}}</a>
                     {% else %}
-                      <a href="#" class="badge badge-secondary">미분류</a>
+                      <a href="/mall/category/no_category/" class="badge badge-secondary">미분류</a>
                     {% endif %}
                   </span><br>
                 </div>
