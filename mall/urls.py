@@ -6,6 +6,7 @@ urlpatterns = [ # IP주소/mall/
   path('<int:pk>/', views.PostDetail.as_view()),
   path('category/<str:slug>/', views.CategoryPage.as_view()),
   path('genre/<str:slug>/', views.GenrePage.as_view()),
+  path('search/<str:q>/', views.PostSearch.as_view()),
 
   path('create_post/', views.PostCreate.as_view()),
   path('update_post/<int:pk>/', views.PostUpdate.as_view()),

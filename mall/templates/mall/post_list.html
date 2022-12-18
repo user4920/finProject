@@ -31,7 +31,23 @@
   </div>
 
   <script>
-    function searchPost() {}
+    function searchPost() {
+      searchValue = document.getElementById('search-input').value.trim();
+      if( searchValue.length > 1) {
+        location.href = "/mall/search/" + searchValue + "/";
+      }
+      else {
+        alert('검색어(' + searchValue + ') 이/가 너무 짧아요.');
+      }
+    };
+
+    document.getElementById('search-input').addEventListener(
+      'keyup', function(event){
+        if(event.key == 'Enter') {
+          searchPost();
+        }
+      }
+    );
   </script>
 
   <!-- post -->

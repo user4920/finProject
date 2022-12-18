@@ -6,6 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django.utils.text import slugify
 from .forms import CommentForm
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 # Create your views here.
 class PostList(ListView):
@@ -182,4 +183,19 @@ class GenrePage(PostList):
     genre = Genre.objects.get(slug=slug)
 
     context['genre'] = genre
+    return context
+
+class PostSearch(PostList):
+
+  def get_queryset(self):
+    q = self.kwargs['q']
+    post_list = Post.objects.filter(
+      Q(title__contains=q) | Q(subtitle__contains=q)
+    ).distinct()
+    return post_list
+
+  def get_context_data(self, *, object_list=None, **kwargs):
+    context = super(PostSearch, self).get_context_data()
+    q = self.kwargs['q']
+    context['search_info'] = f'Search: {q} ({self.get_queryset().count()})'
     return context
