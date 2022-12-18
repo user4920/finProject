@@ -108,5 +108,8 @@ class Comment(models.Model):
   def get_avatar_url(self):
     if self.author.socialaccount_set.exists():
       return self.author.socialaccount_set.first().get_avatar_url()
+    elif self.author.is_superuser or self.author.is_staff:
+      img = "/static/mall/images/staff_profile.png"
+      return img
     else:
-      return 'https://dummyimage.com/50x50/ced4da/6c757d.jpg'
+      return f'https://doitdjango.com/avatar/id/1398/071b01be365056e8/svg/{self.author.email}'

@@ -1,4 +1,5 @@
 {% load socialaccount %}
+{% load static %}
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-2">
   <div class="container">
@@ -7,39 +8,41 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="#">home</a>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item mx-2">
+          <a class="nav-link" href="/">home</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">store</a>
+        <li class="nav-item mx-2">
+          <a class="nav-link" href="/mall/">store</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">about us</a>
+        <li class="nav-item mx-2">
+          <a class="nav-link" href="/about_me/">about us</a>
         </li>
-        <ul class="navbar-nav ml-auto">
-          <!-- My 페이지 -->
-          {% if user.is_authenticated %}
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <!-- if 소셜 아바타가 있다면, -->
-                  <img class="rounded-circle mr-3" src="#" width="25px">
-                <!-- else -->
-                  <img class="rounded-circle mr-3" src="#" width="25px">
-                <!-- endif -->
-                {{user.username}}
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" href="#">My 페이지</a>
-                <a class="dropdown-item" href="/accounts/logout/">LogOut</a>
-              </div>
-            </li>
-          {% else %}
-            <li class="nav-item">
-              <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">LogIn</a>
-            </li>
-          {% endif %}
-        </ul>
+      </ul>
+      <ul class="navbar-nav ml-auto ml-auto">
+        <!-- My 페이지 -->
+        {% if user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {% if user.socialaccount_set.all.0.get_avatar_url %}
+                <img class="rounded-circle mr-1" src="{{user.socialaccount_set.all.0.get_avatar_url}}" width="25px">
+              {% elif user.is_superuser or user.is_staff %}
+                <img class="rounded-circle mr-1" src="{% static 'mall/images/staff_profile.png' %}" width="25px">
+              {% else %}
+                <img class="rounded-circle mr-1" src="https://doitdjango.com/avatar/id/1398/071b01be365056e8/svg/{{user.email}}" width="25px">
+              {% endif %}
+              {{user.username}}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="#">My 페이지</a>
+              <a class="dropdown-item" href="/accounts/logout/">LogOut</a>
+            </div>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">LogIn</a>
+          </li>
+        {% endif %}
       </ul>
     </div>
   </div>
