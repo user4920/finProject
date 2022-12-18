@@ -91,3 +91,13 @@ class Post(models.Model):
 
   def get_absolute_url(self):
     return f'/mall/{self.pk}/'
+
+class Comment(models.Model):
+  post = models.ForeignKey(Post, on_delete=models.CASCADE)
+  author = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default="이름없음")
+  content = models.TextField()
+  created_at = models.DateTimeField(auto_now_add=True)
+  modified_at = models.DateTimeField(auto_now=True)
+
+  def __str__(self):
+    return f'{self.author}::{self.content}'

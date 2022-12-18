@@ -4,6 +4,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
 from django.utils.text import slugify
+from .forms import CommentForm
 
 # Create your views here.
 class PostList(ListView):
@@ -28,6 +29,7 @@ class PostDetail(DetailView):
 
   def get_context_data(self, **kwargs):
     context = super(PostDetail, self).get_context_data()
+    context['comment_form'] = CommentForm
     return context
 
 class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
