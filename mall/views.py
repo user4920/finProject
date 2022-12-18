@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Post, Category, Genre
+from .models import Post, Category, Genre, Comment
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
@@ -98,6 +98,16 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
         genre_str_list.append(g.name)
       context['genre_str_default'] = ';'.join(genre_str_list)
     return context
+
+class CommentUpdate(LoginRequiredMixin, UpdateView):
+  model = Comment
+  form_class = CommentForm
+
+  def dispatch(self, request, *args, **kwargs):
+    if request.user.is_authenticated and request.user == self.get_object().author:
+      return super(CommentUpdate, self).dispatch(request, *args, **kwargs)
+    else:
+      raise PermissionDenied
 
 class CategoryPage(PostList):
   def get_queryset(self):

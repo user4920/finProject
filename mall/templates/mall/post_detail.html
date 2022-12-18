@@ -108,12 +108,20 @@
               Log in and Leave a comment
             </a>
           {% endif %}
-          {% if product.comment_set.exists %}
-            {% for comment in product.comment_set.iterator %}
+          {% if post.comment_set.exists %}
+            {% for comment in post.comment_set.iterator %}
               <div class="media d-flex" id="comment-{{comment.pk}}">
                 <!-- user.avatar -->
                 <img class="mr-3 rounded-circle" src="http://placehold.it/50x50" alt="{{comment.author}}" width="60px">
                 <div class="media-body ms-3">
+                  <!-- edit 버튼 -->
+                  {% if user.is_authenticated and comment.author == user %}
+                    <a role="button" class="btn btn-sm btn-info float-right"
+                       id="commnet-{{comment.pk}}-update" href="/mall/update_comment/{{comment.pk}}">
+                      edit
+                    </a>
+                  {% endif %}
+                  <!-- comment content -->
                   <div class="fw-bold">
                     {{comment.author.username}}
                     <small class="text-muted">{{commnent.created_at}}</small>
