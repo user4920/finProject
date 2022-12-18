@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Post, Category
+from .models import Post, Category, Genre
 from django.views.generic import ListView, DetailView
 
 
@@ -44,4 +44,22 @@ class CategoryPage(PostList):
       category = Category.objects.get(slug=slug)
 
     context['category'] = category
+    return context
+
+class GenrePage(PostList):
+
+  def get_queryset(self):
+    slug = self.kwargs['slug']
+    genre = Genre.objects.get(slug=slug)
+    post_list = genre.post_set.all()
+
+    return post_list
+
+  def get_context_data(self, *, object_list=None, **kwargs):
+    context = super(GenrePage, self).get_context_data()
+
+    slug = self.kwargs['slug']
+    genre = Genre.objects.get(slug=slug)
+
+    context['genre'] = genre
     return context

@@ -42,6 +42,9 @@ class Genre(models.Model):
   def __str__(self):
     return self.name
 
+  def get_absolute_url(self):
+    return f'/mall/genre/{self.slug}/'
+
 # 상품 모델
 class Post(models.Model):
   # 1. 상품명

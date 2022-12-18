@@ -13,6 +13,9 @@
         {% if category %}
           - <span class="badge badge-secondary">{{category}}</span>
         {% endif %}
+        {% if genre %}
+          - <span class="badge badge-secondary">{{genre}} ({{genre.post_set.count}})</span>
+        {% endif %}
       </h1>
 
       <!-- search Box -->

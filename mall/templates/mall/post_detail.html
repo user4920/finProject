@@ -61,7 +61,7 @@
                 <td>
                   {% if post.genre.exists %}
                     {% for g in post.genre.iterator %}
-                      <a class="badge badge-light" href="#">{{g}}</a>
+                      <a class="badge badge-light" href="{{g.get_absolute_url}}">{{g}}</a>
                     {% endfor %}
                   {% endif %}
                 </td>
