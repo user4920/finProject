@@ -1,0 +1,80 @@
+{% extends 'mall/base.html' %}
+
+{% block head_title %}
+  Store
+{% endblock %}
+
+{% block main_area %}
+  <div class="row">
+    <!-- Post 리스트 -->
+    <div class="col-md-8 col-lg-9">
+      <!-- header -->
+      <h1>Store</h1>
+
+      <!-- search Box -->
+      <div class="input-group ml-auto mr-2" style="width:230px">
+        <input id="search-input" class="form-control" type="text" placeholder="search" aria-describedby="button-search">
+        <button class="btn btn-primary" id="button-search" type="button" onclick="searchPost()"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </div>
+
+      <script>
+        function searchPost() {}
+      </script>
+
+      <!-- product -->
+      <div class="row row-cols2 row-cols-lg-3 m-1">
+        {% if post_list.exists %}
+          {% for p in post_list %}
+            <div class="col p-1 card-list">
+              <div class="card h-100" id="post-{{p.pk}}">
+                <!-- head_image -->
+                <div style="position: relative">
+                  <img src="{{p.head_image.url}}" class="card-img-top" alt="{{p.title}}">
+                  <span class="float-right bg-primary text-white p-1"
+                        style="position: absolute; right: 0px; bottom: 0px;">
+                    {% if p.price == 0 %}
+                      무료
+                    {% else %}
+                      {{p.price}}₩
+                    {% endif %}
+                  </span>
+                </div>
+                <!-- title -->
+                <div class="card-body">
+                  <h5 class="card-title">{{p.title}}</h5>
+                  {% if p.subtitle %}
+                    <h6 class="card-subtitle text-muted mb-2">{{p.subtitle}}</h6>
+                  {% endif %}
+                  <span>
+                    {% if p.category %}
+                      <a href="{{p.category.get_absolute_url}}"
+                         class="badge badge-pill badge-secondary">{{p.category}}</a>
+                    {% else %}
+                      <a href="/mall/category/no_category/" class="badge badge-secondary">미분류</a>
+                    {% endif %}
+                  </span><br>
+                </div>
+                <!-- hook_text -->
+                {% if p.hook_text %}
+                  <div class="card-footer text-truncate">
+                    <small class="text-muted">{{p.hook_text}}</small>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      <!-- Pagination -->
+      <nav aria-label="Pagination">
+
+      </nav>
+    </div>
+
+    <!-- 사이드 바 -->
+    <div class="col-md-4 col-lg-3">
+      {% include 'mall/sidebar.html' %}
+    </div>
+  </div>
+{% endblock %}
