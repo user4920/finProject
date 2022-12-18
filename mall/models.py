@@ -72,13 +72,16 @@ class Post(models.Model):
   genre = models.ManyToManyField(Genre, blank=True)
 
   # 8. 추가 필드 - 등록일
-  uploded_at = models.DateField(auto_now_add=True)
+  uploaded_at = models.DateField(auto_now_add=True)
 
   # 8-1. 추가 필드 - 출시일
   created_at = models.DateField()
 
   # 9. 추가 필드 - 자세한 설명
   content = models.TextField()
+
+  # 10. 작성자 - superuser 또는 staff
+  author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
   def __str__(self):
     if self.subtitle:

@@ -1,4 +1,4 @@
-{% extends 'mall/base.html' %}
+{% extends 'mall/base_full.html' %}
 
 {% block head_title %}
   {{post.title}}
@@ -21,7 +21,7 @@
               {% endif %}
             </h1>
             <div class="text-muted fst-italic mb-2">
-              등록일: {{post.uploaded_at | date:"Y-m-d"}}
+              등록일: {{post.uploaded_at | date:"Y-m-d"}} by {{post.author | upper}}
             </div>
             {% if post.category %}
               <a class="badge badge-pill badge-secondary" href="#">
