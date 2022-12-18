@@ -3,6 +3,7 @@ from .models import Post, Category, Genre
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
+from django.utils.text import slugify
 
 # Create your views here.
 class PostList(ListView):
@@ -31,7 +32,7 @@ class PostDetail(DetailView):
 
 class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
   model = Post
-  fields = ['title', 'subtitle', 'hook_text', 'head_image', 'price', 'studio', 'category', 'genre', 'created_at', 'content']
+  fields = ['title', 'subtitle', 'hook_text', 'head_image', 'price', 'studio', 'category', 'created_at', 'content']
 
   def test_func(self):
     return self.request.user.is_superuser or self.request.user.is_staff
@@ -40,17 +41,61 @@ class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     current_user = self.request.user
     if current_user.is_authenticated and (current_user.is_staff or current_user.is_superuser):
       form.instance.author = current_user
-      return super(PostCreate, self).form_valid(form)
+      response = super(PostCreate, self).form_valid(form)
+
+      genre_str = self.request.POST.get('genre_str')
+      if genre_str:
+        genre_str = genre_str.strip() #공백제거
+        genre_str = genre_str.replace(',', ';') #쉼표->세미콜론
+        genre_list = genre_str.split(';')
+
+        for g in genre_list:
+          g = g.strip()
+          genre, is_genre_created = Genre.objects.get_or_create(name=g) #값이 있으면 가져오고, 없으면 생성
+          if is_genre_created:
+            genre.slug = slugify(g, allow_unicode=True)
+            genre.save()
+          self.object.genre.add(genre)
+
+      return response
+
     else:
       return redirect('/mall/')
 
 class PostUpdate(LoginRequiredMixin, UpdateView):
   model = Post
-  fields = ['title', 'subtitle', 'hook_text', 'head_image', 'price', 'studio', 'category', 'genre', 'created_at', 'content']
+  fields = ['title', 'subtitle', 'hook_text', 'head_image', 'price', 'studio', 'category', 'created_at', 'content']
 
   template_name = 'mall/post_update_form.html'
 
+  def form_valid(self, form):
+    response = super(PostUpdate, self).form_valid(form)
+    self.object.genre.clear()
 
+    genre_str = self.request.POST.get('genre_str')
+    if genre_str:
+      genre_str = genre_str.strip()  # 공백제거
+      genre_str = genre_str.replace(',', ';')  # 쉼표->세미콜론
+      genre_list = genre_str.split(';')
+
+      for g in genre_list:
+        g = g.strip()
+        genre, is_genre_created = Genre.objects.get_or_create(name=g)  # 값이 있으면 가져오고, 없으면 생성
+        if is_genre_created:
+          genre.slug = slugify(g, allow_unicode=True)
+          genre.save()
+        self.object.genre.add(genre)
+
+    return response
+
+  def get_context_data(self, **kwargs):
+    context = super(PostUpdate, self).get_context_data()
+    if self.object.genre.exists():
+      genre_str_list = list()
+      for g in self.object.genre.all():
+        genre_str_list.append(g.name)
+      context['genre_str_default'] = ';'.join(genre_str_list)
+    return context
 
 class CategoryPage(PostList):
   def get_queryset(self):
