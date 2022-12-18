@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-2">
+  <div class="container">
+    <a class="navbar-brand" href="/">GameLibrary</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#">home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">store</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">about us</a>
+        </li>
+        <ul class="navbar-nav ml-auto">
+          <!-- My 페이지 -->
+          <!-- if 로그인 되어 있다면, -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <!-- if 소셜 아바타가 있다면, -->
+                  <img class="rounded-circle mr-3" src="#" width="25px">
+                <!-- else -->
+                  <img class="rounded-circle mr-3" src="#" width="25px">
+                <!-- endif -->
+                유저 네임
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="#">My 페이지</a>
+                <a class="dropdown-item" href="#">LogOut</a>
+              </div>
+            </li>
+            <!-- else 로그아웃 시, 회원가입, 로그인 각 페이지로 이동 -->
+            <li class="nav-item">
+              <a class="nav-link" href="#">SignUp</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">SignIn</a>
+            </li>
+        </ul>
+      </ul>
+    </div>
+  </div>
+</nav>
