@@ -1,3 +1,5 @@
+{% load socialaccount %}
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-2">
   <div class="container">
     <a class="navbar-brand" href="/">GameLibrary</a>
@@ -17,7 +19,7 @@
         </li>
         <ul class="navbar-nav ml-auto">
           <!-- My 페이지 -->
-          <!-- if 로그인 되어 있다면, -->
+          {% if user.is_authenticated %}
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <!-- if 소셜 아바타가 있다면, -->
@@ -25,22 +27,60 @@
                 <!-- else -->
                   <img class="rounded-circle mr-3" src="#" width="25px">
                 <!-- endif -->
-                유저 네임
+                {{user.username}}
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <a class="dropdown-item" href="#">My 페이지</a>
                 <a class="dropdown-item" href="#">LogOut</a>
               </div>
             </li>
-            <!-- else 로그아웃 시, 회원가입, 로그인 각 페이지로 이동 -->
+          {% else %}
             <li class="nav-item">
-              <a class="nav-link" href="#">SignUp</a>
+              <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">LogIn</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">SignIn</a>
-            </li>
+          {% endif %}
         </ul>
       </ul>
     </div>
   </div>
 </nav>
+
+<!-- Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"></h5><i class="fa-solid fa-right-to-bracket"></i> LogIn</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <!-- body -->
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-6">
+            <a role="button" class="btn btn-outline-dark btn-block btn-sm"
+               href="{% provider_login_url 'google' %}">
+              <i class="fa-brands fa-google"></i> LogIn with Google
+            </a>
+            <a role="button" class="btn btn-outline-dark btn-block btn-sm"
+               href="/accounts/login/">
+              <i class="fa-regular fa-envelope"></i> LogIn with Email
+            </a>
+          </div>
+          <div class="col-6">
+            <a role="button" class="btn btn-outline-dark btn-block btn-sm"
+	            href="/accounts/signup">
+              <i class="fa-regular fa-envelope"></i> SignUp with Email
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
