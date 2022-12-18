@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import Post, Category, Genre
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
+from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 class PostList(ListView):
@@ -43,6 +43,14 @@ class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
       return super(PostCreate, self).form_valid(form)
     else:
       return redirect('/mall/')
+
+class PostUpdate(LoginRequiredMixin, UpdateView):
+  model = Post
+  fields = ['title', 'subtitle', 'hook_text', 'head_image', 'price', 'studio', 'category', 'genre', 'created_at', 'content']
+
+  template_name = 'mall/post_update_form.html'
+
+
 
 class CategoryPage(PostList):
   def get_queryset(self):

@@ -88,3 +88,6 @@ class Post(models.Model):
       return f'[{self.pk}]{self.title}-{self.subtitle}::{self.studio}'
     else:
       return f'[{self.pk}]{self.title}::{self.studio}'
+
+  def get_absolute_url(self):
+    return f'/mall/{self.pk}/'

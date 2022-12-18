@@ -24,12 +24,17 @@
               등록일: {{post.uploaded_at | date:"Y-m-d"}} by {{post.author | upper}}
             </div>
             {% if post.category %}
-              <a class="badge badge-pill badge-secondary" href="#">
+              <a class="badge badge-pill badge-secondary" href="{{post.category.get_absolute_url}}">
                 {{post.category}}
               </a>
             {% else %}
-              <a class="badge badge-secondary" href="#">
+              <a class="badge badge-secondary" href="/mall/category/no_category/">
                 미분류
+              </a>
+            {% endif %}
+            {% if user.is_authenticated and user == post.author %}
+              <a href="/mall/update_post/{{post.pk}}/" role="button" class="btn btn-outline-info btn-sm float-right">
+                <i class="fa-solid fa-minus"></i> Edit
               </a>
             {% endif %}
             <hr>

@@ -35,43 +35,47 @@
   </script>
 
   <!-- post -->
-  <div class="row row-cols2 row-cols-lg-3 m-1">
+  <div class="row row-cols-2 row-cols-lg-3 m-1">
     {% if post_list.exists %}
       {% for p in post_list %}
         <div class="col p-1 card-list">
           <div class="card h-100" id="post-{{p.pk}}">
-            <!-- head_image -->
-            <div style="position: relative">
-              <img src="{{p.head_image.url}}" class="card-img-top" alt="{{p.title}}">
-              <span class="float-right bg-primary text-white p-1" style="position: absolute; right: 0px; bottom: 0px;">
-                {% if p.price == 0 %}
-                  무료
+            <div class="card-header p-2" style="background:white;">
+              <a href="{{p.get_absolute_url}}" class="btn btn-sm btn-link py-0 px-2">
+                더보기
+              </a>
+              <span class="float-right">
+                {% if p.category %}
+                  <a href="{{p.category.get_absolute_url}}" class="badge badge-pill badge-secondary"> {{p.category}}</a>
                 {% else %}
-                  {{p.price}}₩
+                  <a href="/mall/category/no_category/" class="badge badge-pill badge-secondary">미분류</a>
                 {% endif %}
               </span>
             </div>
-            <!-- title -->
-            <div class="card-body">
-              <h5 class="card-title">{{p.title}}</h5>
-              {% if p.subtitle %}
-                <h6 class="card-subtitle text-muted mb-2">{{p.subtitle}}</h6>
-              {% endif %}
-              <span>
-                {% if p.category %}
-                  <a href="{{p.category.get_absolute_url}}"
-                    class="badge badge-pill badge-secondary">{{p.category}}</a>
-                {% else %}
-                  <a href="/mall/category/no_category/" class="badge badge-secondary">미분류</a>
-                {% endif %}
-              </span><br>
-            </div>
-            <!-- hook_text -->
-            {% if p.hook_text %}
-              <div class="card-footer text-truncate">
-                <small class="text-muted">{{p.hook_text}}</small>
+            <div style="transform: rotate(0);">
+              <!-- head_image -->
+              <div style="position: relative">
+                <img src="{{p.head_image.url}}" class="card-img-top" alt="{{p.title}}">
+                <span class="float-right bg-primary text-white p-1" style="position: absolute; right: 0px; bottom: 0px;">
+                  {% if p.price == 0 %}
+                    무료
+                  {% else %}
+                    {{p.price}}₩
+                  {% endif %}
+                </span>
               </div>
-            {% endif %}
+              <!-- title -->
+              <div class="card-body">
+                <h5 class="card-title">{{p.title}}</h5>
+                {% if p.subtitle %}
+                  <h6 class="card-subtitle text-muted mb-2">{{p.subtitle}}</h6>
+                {% endif %}
+                {% if p.hook_text %}
+                  <p class="small text-muted text-truncate mb-0">{{p.hook_text}}</p>
+                {% endif %}
+              </div>
+              <a href="{{p.get_absolute_url}}" class="stretched-link"></a>
+            </div>
           </div>
         </div>
       {% endfor %}
