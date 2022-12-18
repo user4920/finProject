@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
 from django.utils.text import slugify
 from .forms import CommentForm
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 class PostList(ListView):
@@ -71,24 +72,30 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
   template_name = 'mall/post_update_form.html'
 
   def form_valid(self, form):
-    response = super(PostUpdate, self).form_valid(form)
-    self.object.genre.clear()
+    current_user = self.request.user
+    if current_user.is_authenticated and (current_user.is_staff or current_user.is_superuser):
+      form.instance.author = current_user
+      response = super(PostUpdate, self).form_valid(form)
+      self.object.genre.clear()
 
-    genre_str = self.request.POST.get('genre_str')
-    if genre_str:
-      genre_str = genre_str.strip()  # 공백제거
-      genre_str = genre_str.replace(',', ';')  # 쉼표->세미콜론
-      genre_list = genre_str.split(';')
+      genre_str = self.request.POST.get('genre_str')
+      if genre_str:
+        genre_str = genre_str.strip()  # 공백제거
+        genre_str = genre_str.replace(',', ';')  # 쉼표->세미콜론
+        genre_list = genre_str.split(';')
 
-      for g in genre_list:
-        g = g.strip()
-        genre, is_genre_created = Genre.objects.get_or_create(name=g)  # 값이 있으면 가져오고, 없으면 생성
-        if is_genre_created:
-          genre.slug = slugify(g, allow_unicode=True)
-          genre.save()
-        self.object.genre.add(genre)
+        for g in genre_list:
+          g = g.strip()
+          genre, is_genre_created = Genre.objects.get_or_create(name=g)  # 값이 있으면 가져오고, 없으면 생성
+          if is_genre_created:
+            genre.slug = slugify(g, allow_unicode=True)
+            genre.save()
+          self.object.genre.add(genre)
 
-    return response
+      return response
+
+    else:
+      return redirect('/mall/')
 
   def get_context_data(self, **kwargs):
     context = super(PostUpdate, self).get_context_data()
@@ -98,6 +105,23 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
         genre_str_list.append(g.name)
       context['genre_str_default'] = ';'.join(genre_str_list)
     return context
+
+def new_comment(request, pk):
+  if request.user.is_authenticated:
+    post = get_object_or_404(Post, pk=pk)
+
+    if request.method == 'POST':
+      comment_form = CommentForm(request.POST)
+      if comment_form.is_valid():
+        comment = comment_form.save(commit=False)
+        comment.post = post
+        comment.author = request.user
+        comment.save()
+        return redirect(comment.get_absolute_url())
+    else:
+      return redirect(post.get_absolute_url())
+  else:
+    raise PermissionDenied
 
 class CommentUpdate(LoginRequiredMixin, UpdateView):
   model = Comment
