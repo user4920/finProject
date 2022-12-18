@@ -1,5 +1,5 @@
 {% extends 'mall/base_full.html' %}
-
+{% load crispy_forms_tags %}
 {% block head_title %}
   Edit Post - GameLibrary
 {% endblock %}
@@ -9,13 +9,12 @@
   <hr>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <table>
-      {{form}}
-      <tr>
-        <th><label for="id_genre_str">Genre:</label></th>
-        <td><input type="text" name="genre_str" id="id_genre_str" value="{{genre_str_default}}"></td>
-      </tr>
-    </table>
+    {{form | crispy}}
+    <div id="div_it_genre_str">
+      <label for="id_genre_str">Genre:</label>
+      <input type="text" id="id_genre_str" name="genre_str"
+             class="textinput textInput form-control">
+    </div><br>
     <button type="submit" class="btn btn-primary float-right">Submit</button>
   </form>
 {% endblock %}
