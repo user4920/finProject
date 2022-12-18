@@ -6,10 +6,16 @@ from django.views.generic import ListView, DetailView
 # Create your views here.
 class PostList(ListView):
   model = Post
+  paginate_by = 6
   ordering = '-pk'
 
   def get_context_data(self, *, object_list=None, **kwargs):
     context = super(PostList, self).get_context_data()
+
+    page = context['page_obj']
+    paginator = page.paginator
+    pagelist = paginator.get_elided_page_range(page.number, on_each_side=2, on_ends=1)
+    context['pagelist'] = pagelist
 
     context['categories'] = Category.objects.all()
     context['no_category_post_count'] = Post.objects.filter(category=None).count()
