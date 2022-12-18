@@ -1,0 +1,88 @@
+{% extends 'mall/base.html' %}
+
+{% block head_title %}
+  {{post.title}}
+  {% if post.subtitle %}
+    - {{post.subtitle}}
+  {% endif %}
+{% endblock %}
+
+{% block main_area %}
+  <div id="post-area">
+    <!-- post content -->
+    <div class="row">
+      <div class="col-lg-9">
+        <!-- header -->
+        <header>
+          <div id="header" class="mb-4">
+            <h1 class="fw-bolder mb-1">{{post.title}}
+              {% if post.subtitle %}
+                - {{post.subtitle}}
+              {% endif %}
+            </h1>
+            <div class="text-muted fst-italic mb-2">
+              등록일: {{post.uploaded_at | date:"Y-m-d"}}
+            </div>
+            {% if post.category %}
+              <a class="badge badge-pill badge-secondary" href="#">
+                {{post.category}}
+              </a>
+            {% else %}
+              <a class="badge badge-secondary" href="#">
+                미분류
+              </a>
+            {% endif %}
+            <hr>
+          </div>
+        </header>
+        <!-- post image -->
+        <figure id="head_img">
+          <img style="width: 100%" class="rounded" src="{{post.head_image.url}}" alt="{{post.title}}의 image">
+        </figure>
+        <!-- content -->
+        <section id="content" class="mb-5">
+          <h5>Content</h5>
+          <p class="fs-5 mb-4">{{post.content | linebreaks}}</p>
+        </section>
+      </div>
+
+      <!-- widget -->
+      <div class="col-lg-3">
+        <!-- CART -->
+        <div class="card border-0 m-1">
+          <button class="btn btn-outline-dark" type="button" id="button-cart">{{post.price}}₩ <i class="fa-solid fa-cart-shopping"></i></button>
+        </div>
+        <!-- INFO -->
+        <div class="card m-1 mb-5">
+          <div class="card-body">
+            <table>
+              <tr>
+                <td class="small text-muted">장르: </td>
+                <td>
+                  {% if post.genre.exists %}
+                    {% for g in post.genre.iterator %}
+                      <a class="badge badge-light" href="#">{{g}}</a>
+                    {% endfor %}
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td class="small text-muted" style="width:50px">제작사: </td>
+                <td class="small">{{post.studio}}</td>
+              </tr>
+              <tr>
+                <td class="small text-muted">출시일: </td>
+                <td class="small">{{post.created_at | date:"Y-m-d"}}</td>
+              </tr>
+            </table><hr>
+            {% if post.hook_text %}
+              <small class="">{{post.hook_text}}</small>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comment -->
+  </div>
+{% endblock %}

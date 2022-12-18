@@ -21,7 +21,7 @@
         function searchPost() {}
       </script>
 
-      <!-- product -->
+      <!-- post -->
       <div class="row row-cols2 row-cols-lg-3 m-1">
         {% if post_list.exists %}
           {% for p in post_list %}
@@ -47,10 +47,10 @@
                   {% endif %}
                   <span>
                     {% if p.category %}
-                      <a href="{{p.category.get_absolute_url}}"
+                      <a href="#"
                          class="badge badge-pill badge-secondary">{{p.category}}</a>
                     {% else %}
-                      <a href="/mall/category/no_category/" class="badge badge-secondary">미분류</a>
+                      <a href="#" class="badge badge-secondary">미분류</a>
                     {% endif %}
                   </span><br>
                 </div>
